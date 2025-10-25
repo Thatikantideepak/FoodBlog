@@ -24,13 +24,6 @@ export default function Account() {
     }
   }, [navigate]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    localStorage.removeItem("fav");
-    navigate("/");
-  };
-
   const handleClose = () => {
     navigate("/");
   };
@@ -60,11 +53,7 @@ export default function Account() {
             <span>{new Date(user.createdAt).toLocaleDateString()}</span>
           </div>
         </div>
-        <div className="account-actions">
-          <button onClick={handleLogout} className="logout-btn">
-            Logout
-          </button>
-        </div>
+  {/* Logout option removed from account page per request */}
       </div>
     </div>
   );

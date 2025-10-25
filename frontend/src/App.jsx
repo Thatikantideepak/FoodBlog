@@ -53,7 +53,7 @@ const getRecipe = async ({ params }) => {
       try {
         const userResponse = await axios.get(API_ENDPOINTS.GET_USER(recipe.createdBy));
         recipe.email = userResponse.data.email;
-      } catch (userError) {
+      } catch {
         // If user not found, assign a default email and don't crash
         recipe.email = 'Anonymous';
       }

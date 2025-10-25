@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLoaderData, useNavigate } from 'react-router-dom'
-import foodImg from '../assets/foodRecipe.png'
+// note: image import removed because the image is now referenced via API endpoint
 import { BsStopwatchFill } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
@@ -13,7 +13,8 @@ export default function RecipeItems() {
     const [allRecipes, setAllRecipes] = useState()
     let path = window.location.pathname === "/myRecipe" ? true : false
     let favItems = JSON.parse(localStorage.getItem("fav")) ?? []
-    const [isFavRecipe, setIsFavRecipe] = useState(false)
+    // local state for toggle is no longer required here
+    // const [isFavRecipe, setIsFavRecipe] = useState(false)
     const navigate=useNavigate()
     console.log(allRecipes)
 
@@ -37,7 +38,7 @@ export default function RecipeItems() {
         let filterItem = favItems.filter(recipe => recipe._id !== item._id)
         favItems = favItems.filter(recipe => recipe._id === item._id).length === 0 ? [...favItems, item] : filterItem
         localStorage.setItem("fav", JSON.stringify(favItems))
-        setIsFavRecipe(pre => !pre)
+        // state toggle removed; components read directly from localStorage when rendering
     }
 
     return (

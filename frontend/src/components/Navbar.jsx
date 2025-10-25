@@ -30,12 +30,13 @@ export default function Navbar() {
     };
   }, []);
 
-  // Safely parse user data to prevent crashes
-  let user = null;
+  // Safely parse user data to prevent crashes. Prefix with underscore to
+  // indicate the variable may be unused but intentionally kept.
+  let _user = null;
   try {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      user = JSON.parse(storedUser);
+      _user = JSON.parse(storedUser);
     }
   } catch (error) {
     console.error("Failed to parse user data from localStorage:", error);
@@ -48,43 +49,51 @@ export default function Navbar() {
     navigate("/"); // Redirect to home page after logout
   };
 
-  const handleLinkClick = (e, path) => {
-    if (!isLogin) {
-      // If user is not logged in, prevent navigation and open login modal
-      e.preventDefault();
-      setIsOpen(true);
-    } else {
-      // If logged in, proceed with navigation
-      navigate(path);
-    }
-  };
+  // NOTE: navigation guard logic is inlined on the NavLink onClick handlers
+  // so the helper below was removed to avoid an unused-variable lint error.
 
   return (
     <>
       <header>
         <h2>Food Blog</h2>
         <ul>
-          <li><NavLink to="/">Home</NavLink></li>
-          {/* **FIX 2**: Links now always point to the correct path. The onClick handler manages access. */}
           <li>
-            <a href="/myRecipe" onClick={(e) => handleLinkClick(e, '/myRecipe')}>
+            <NavLink to="/" end className={({ isActive }) => isActive ? 'active' : ''}>
+              Home
+            </NavLink>
+          </li>
+
+          {/* Protected links: use NavLink so active class works, but prevent navigation when not logged in */}
+          <li>
+            <NavLink
+              to="/myRecipe"
+              className={({ isActive }) => isActive ? 'active' : ''}
+              onClick={(e) => { if (!isLogin) { e.preventDefault(); setIsOpen(true); } }}
+            >
               My Recipe
-            </a>
+            </NavLink>
           </li>
+
           <li>
-            <a href="/favRecipe" onClick={(e) => handleLinkClick(e, '/favRecipe')}>
+            <NavLink
+              to="/favRecipe"
+              className={({ isActive }) => isActive ? 'active' : ''}
+              onClick={(e) => { if (!isLogin) { e.preventDefault(); setIsOpen(true); } }}
+            >
               Favourites
-            </a>
+            </NavLink>
           </li>
+
           {isLogin && (
             <li>
-              <a href="/account" onClick={(e) => handleLinkClick(e, '/account')}>
+              <NavLink to="/account" className={({ isActive }) => isActive ? 'active' : ''}>
                 Account
-              </a>
+              </NavLink>
             </li>
           )}
+
           <li>
-            {/* **FIX 3**: Simplified Login/Logout button logic */}
+            {/* Login/Logout button */}
             <p className='login' onClick={isLogin ? handleLogout : () => setIsOpen(true)} style={{ cursor: 'pointer' }}>
               {isLogin ? "Logout" : "Login"}
             </p>

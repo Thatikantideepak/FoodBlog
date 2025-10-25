@@ -20,8 +20,8 @@ export default function EditRecipe() {
                 })
             })
         }
-        getData()
-    },[])
+            getData()
+        },[id])
 
     const onHandleChange = (e) => {
         let val = (e.target.name === "ingredients") ? e.target.value.split(",") : (e.target.name === "file") ? e.target.files[0] : e.target.value
